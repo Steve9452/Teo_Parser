@@ -18,6 +18,8 @@ tokens = (
    'Corchete_derecho',
    'Tipo_dato',
    'Palabra_revervada',
+   'Entrada',
+   'Imprimir',
    'Identificador',
    'Inicio_bloque',
    'Fin_bloque',
@@ -70,6 +72,14 @@ def t_Tipo_dato(t):
 
 def t_Palabra_revervada(t):
     r'(return)|(if)|(else)|(do)|(while)|(for)|(switch)|(case)|(break)|(struct)|(class)|(this)|(malloc)|(new)|(free)'
+    return t
+
+def t_Entrada(t):
+    r'(cin)|(scanf)'
+    return t
+
+def t_Imprimir(t):
+    r'(cout)|(printf)'
     return t
 
 def t_Identificador(t):
