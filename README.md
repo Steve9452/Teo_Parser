@@ -1,1 +1,1 @@
-# TEO-Fase0
+# Autómatas finitos determinísticos
