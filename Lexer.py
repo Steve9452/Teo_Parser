@@ -26,7 +26,7 @@ tokens = (
    'Fin_instruccion',
    'Asignacion',
    'Comentario_linea',
-   'comentario_bloque',
+   'Comentario_bloque',
    'Cadena',
    'Coma',
    'Punto',
@@ -94,15 +94,17 @@ def t_Comentario_linea(t):
     r'\/\/.*'
     return t
 
-def t_comentario_bloque(t):
+def t_Comentario_bloque(t):
     r'\/\*(.|\n)*\*\/'
     return t
 
 # Error handling rule
 def t_error(t):
-    print("Caracter Ilegal '%s'" % t.value[0])
+    print("Error. Caracter ilegal: '%s'" % t.value[0])
     t.lexer.skip(1)    
     return t
+
+values = dict()
 
 # Build the lexer
 lexer = lex.lex()
@@ -114,8 +116,12 @@ def Lexer():
         tok=lexer.token()
         if not tok:
             break
-        if (tok.type == 'error'):
+        if (tok.type == 'error' or tok.type == 'Comentario_linea' or tok.type == 'Comentario_bloque'):
             continue
-        print(tok.type, ' Valor: (', tok.value, ') Linea: ', tok.lineno, ' Posicion: ', tok.lexpos)
+        print(tok.value, ':',  tok.type)
+        values[tok.value] = tok.type
+        #, ') Linea: ', tok.lineno, ' Posicion: ', tok.lexpos
 
 Lexer()
+#for x, y in values.items():
+#  print(x,':', y)
