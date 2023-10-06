@@ -1,59 +1,28 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
-#include "geometry/mesh.hpp"
-#include "math_utilities/matrix_operations.hpp"
-#include "mef_utilities/mef_process.hpp"
-#include "gid/input_output.hpp"
+int main () {
+    //Declarar variables
+    int a = 0, b = 0, c = 0;
+    int respuesta [2];
 
-int main (int argc, char** argv) {
-    if(argc != 2){
-        cout << "Incorrect use of the program, it must be: mef filename\n";
-        exit(EXIT_FAILURE);
-    }
+    //Usuario ingresa variables
+    cout << "Ingrese el valor de a: ";
+    cin >> a;
+    cout << "Ingrese el valor de b: ";
+    cin >> b;
+    cout << "Ingrese el valor de c: ";
+    cin >> b;
 
-    Mesh M;
+    //Formula general de la ecuacion cuadratica
+    respuesta[0] = (-b + sqrt((b^2) - 4*a*c))/2*a;
+    respuesta[1] = (-b - sqrt((b^2) - 4*a*c))/2*a;
 
-    cout << "Reading geometry and mesh data...\n\n";
-    string filename(argv[1]);
-    read_input(filename, &M);
-    //M.report();
-
-    short num_nodes = M.get_quantity(NUM_NODES);
-    short num_elements = M.get_quantity(NUM_ELEMENTS);
-    Matrix K(num_nodes,num_nodes), local_Ks[num_elements];
-    Vector b(num_nodes),           local_bs[num_elements];
-
-    cout << "Creating local systems...\n\n";
-    create_local_systems(local_Ks, local_bs, num_elements, &M);
-
-    cout << "Performing Assembly...\n\n";
-    assembly(&K, &b, local_Ks, local_bs, num_elements, &M);
-
-    //K.show(); b.show();
-
-    cout << "Applying Neumann Boundary Conditions...\n\n";
-    apply_neumann_boundary_conditions(&b, &M);
-
-    //b.show();
-
-    cout << "Applying Dirichlet Boundary Conditions...\n\n";
-    apply_dirichlet_boundary_conditions(&K, &b, &M);
-
-    //K.show(); b.show();
-
-    cout << "Solving global system...\n\n";
-    Vector T(b.get_size()), T_full(num_nodes);
-    solve_system(&K, &b, &T);
-    //T.show();
-    
-    cout << "Preparing results...\n\n";
-    merge_results_with_dirichlet(&T, &T_full, num_nodes, &M);
-    //T_full.show();
-
-    cout << "Writing output file...\n\n";
-    write_output(filename, &T_full);
+    //Imprimir respuesta
+    cout << "La respuesta 1 es: " << respuesta[0] << endl;
+    cout << "La respuesta 2 es: " << respuesta[1] << endl;
 
     return 0;
 }
