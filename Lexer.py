@@ -24,6 +24,7 @@ tokens = (
    'Inicio_bloque',
    'Fin_bloque',
    'Fin_instruccion',
+   'Ligamiento',
    'Asignacion',
    'Comentario_linea',
    'Comentario_bloque',
@@ -47,6 +48,7 @@ t_Corchete_derecho  = r'\]'
 t_Inicio_bloque = r'\{'
 t_Fin_bloque = r'\}'
 t_Fin_instruccion = r'\;'
+t_Ligamiento = r'\:'
 t_Asignacion = r'\='
 t_Coma= r'\,'
 t_Punto= r'\.'
@@ -104,8 +106,6 @@ def t_error(t):
     t.lexer.skip(1)    
     return t
 
-values = dict()
-
 # Build the lexer
 lexer = lex.lex()
 
@@ -117,11 +117,8 @@ def Lexer():
         if not tok:
             break
         if (tok.type == 'error' or tok.type == 'Comentario_linea' or tok.type == 'Comentario_bloque'):
+            print(tok.type)
             continue
         print(tok.value, ':',  tok.type)
-        values[tok.value] = tok.type
-        #, ') Linea: ', tok.lineno, ' Posicion: ', tok.lexpos
 
 Lexer()
-#for x, y in values.items():
-#  print(x,':', y)
